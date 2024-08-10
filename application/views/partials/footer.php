@@ -24,8 +24,6 @@
     integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
 <script src="<?php echo base_url('assets/js/scripts.js'); ?>"></script>
 </body>
-
 </html>

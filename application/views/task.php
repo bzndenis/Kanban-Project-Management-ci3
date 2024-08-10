@@ -22,52 +22,13 @@
                         <p><?= $task->description ?></p>
                         <form action="<?= site_url('kanban/update_task_status') ?>" method="post">
                             <input type="hidden" name="task_id" value="<?= $task->id ?>">
-                            <input type="hidden" name="project_id" value="<?= $task->project_id ?>">
-                            <select name="status" onchange="this.form.submit()">
-                                <option value="todo" selected>To Do</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="done">Done</option>
+                            <select name="status">
+                                <option value="todo" <?= $task->status == 'todo' ? 'selected' : ''; ?>>To Do</option>
+                                <option value="ongoing" <?= $task->status == 'ongoing' ? 'selected' : ''; ?>>Ongoing</option>
+                                <option value="review" <?= $task->status == 'review' ? 'selected' : ''; ?>>Review</option>
+                                <option value="finish" <?= $task->status == 'finish' ? 'selected' : ''; ?>>Finish</option>
                             </select>
-                        </form>
-                    </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-        <div class="kanban-column">
-            <h2>In Progress</h2>
-            <?php foreach ($tasks as $task): ?>
-                <?php if ($task->status == 'in_progress'): ?>
-                    <div class="kanban-task">
-                        <h3><?= $task->title ?></h3>
-                        <p><?= $task->description ?></p>
-                        <form action="<?= site_url('kanban/update_task_status') ?>" method="post">
-                            <input type="hidden" name="task_id" value="<?= $task->id ?>">
-                            <input type="hidden" name="project_id" value="<?= $task->project_id ?>">
-                            <select name="status" onchange="this.form.submit()">
-                                <option value="todo">To Do</option>
-                                <option value="in_progress" selected>In Progress</option>
-                                <option value="done">Done</option>
-                            </select>
-                        </form>
-                    </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-        <div class="kanban-column">
-            <h2>Done</h2>
-            <?php foreach ($tasks as $task): ?>
-                <?php if ($task->status == 'done'): ?>
-                    <div class="kanban-task">
-                        <h3><?= $task->title ?></h3>
-                        <p><?= $task->description ?></p>
-                        <form action="<?= site_url('kanban/update_task_status') ?>" method="post">
-                            <input type="hidden" name="task_id" value="<?= $task->id ?>">
-                            <input type="hidden" name="project_id" value="<?= $task->project_id ?>">
-                            <select name="status" onchange="this.form.submit()">
-                                <option value="todo">To Do</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="done" selected>Done</option>
-                            </select>
+                            <button type="submit">Update</button>
                         </form>
                     </div>
                 <?php endif; ?>

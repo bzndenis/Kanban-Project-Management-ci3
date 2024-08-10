@@ -6,15 +6,13 @@ class Team_model extends CI_Model {
     }
 
     public function add_member($data) {
-        return $this->db->insert('team_members', $data);
+        $sql = "INSERT INTO team_members (project_id, user_id) VALUES (?, ?)";
+        return $this->db->query($sql, array($data['project_id'], $data['user_id']));
     }
 
     public function get_members_by_project($project_id) {
-        $this->db->select('users.id, users.username');
-        $this->db->from('team_members');
-        $this->db->join('users', 'team_members.user_id = users.id');
-        $this->db->where('team_members.project_id', $project_id);
-        return $this->db->get()->result();
+        $sql = "SELECT users.id, users.username FROM team_members JOIN users ON team_members.user_id = users.id WHERE team_members.project_id = ?";
+        return $this->db->query($sql, array($project_id))->result();
     }
 }
 ?>

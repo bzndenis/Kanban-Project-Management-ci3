@@ -6,19 +6,18 @@ class User_model extends CI_Model {
     }
 
     public function register($data) {
-        return $this->db->insert('users', $data);
+        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        return $this->db->query($sql, array($data['username'], $data['password']));
     }
 
     public function login($username, $password) {
-        $this->db->where('username', $username);
-        $this->db->where('password', md5($password));
-        return $this->db->get('users')->row();
+        $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        return $this->db->query($sql, array($username, md5($password)))->row();
     }
 
-    // Tambahkan metode ini
     public function is_username_exists($username) {
-        $this->db->where('username', $username);
-        $query = $this->db->get('users');
+        $sql = "SELECT * FROM users WHERE username = ?";
+        $query = $this->db->query($sql, array($username));
         return $query->num_rows() > 0;
     }
 
@@ -27,8 +26,9 @@ class User_model extends CI_Model {
     }
 
     public function search_users($term) {
-        $this->db->like('username', $term);
-        $query = $this->db->get('users');
+        $sql = "SELECT * FROM users WHERE username LIKE ?";
+        $query = $this->db->query($sql, array('%' . $term . '%'));
         return $query->result();
     }
 }
+?>

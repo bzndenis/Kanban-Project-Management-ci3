@@ -13,23 +13,30 @@ class Auth extends CI_Controller
     }
 
     public function register_process()
-{
-    $username = $this->input->post('username');
-    $password = $this->input->post('password');
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
 
-    // Validasi username tidak sama
-    if ($this->User_model->is_username_exists($username)) {
-        $this->session->set_flashdata('error', 'Username sudah ada, silakan pilih username lain.');
-        redirect('auth/register');
-    } else {
-        $data = [
-            'username' => $username,
-            'password' => md5($password)
-        ];
-        $this->User_model->register($data);
-        redirect('auth/login');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('auth/register');
+        } else {
+            $username = $this->input->post('username', TRUE);
+            $password = $this->input->post('password', TRUE);
+
+            if ($this->User_model->is_username_exists($username)) {
+                $this->session->set_flashdata('error', 'Username sudah ada, silakan pilih username lain.');
+                redirect('auth/register');
+            } else {
+                $data = [
+                    'username' => $username,
+                    'password' => md5($password)
+                ];
+                $this->User_model->register($data);
+                redirect('auth/login');
+            }
+        }
     }
-}
 
     public function login()
     {
@@ -38,15 +45,24 @@ class Auth extends CI_Controller
 
     public function login_process()
     {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-        $user = $this->User_model->login($username, $password);
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
 
-        if ($user) {
-            $this->session->set_userdata('user_id', $user->id);
-            redirect('kanban/index');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('auth/login');
         } else {
-            redirect('auth/login');
+            $username = $this->input->post('username', TRUE);
+            $password = $this->input->post('password', TRUE);
+            $user = $this->User_model->login($username, $password);
+
+            if ($user) {
+                $this->session->set_userdata('user_id', $user->id);
+                redirect('kanban/index');
+            } else {
+                $this->session->set_flashdata('error', 'Username atau password salah.');
+                redirect('auth/login');
+            }
         }
     }
 
